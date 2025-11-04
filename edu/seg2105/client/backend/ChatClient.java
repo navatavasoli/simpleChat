@@ -85,6 +85,9 @@ public class ChatClient extends AbstractClient
     }
   }
   
+  
+  
+  
   /**
    * Handles commands from the user. 
    * @param command the command prompt the user enters into the console.
@@ -94,19 +97,44 @@ public class ChatClient extends AbstractClient
 		  quit();
 	  } else if(command.equals("#logoff")) {
 		  // override and implement the closeConnection() method in AbstractClient
+		  connectionClosed();
+		  try {
+			closeConnection();
+		} catch (IOException e) { }
+		  clientUI.display("Logoff complete.");
 	  } else if(command.equals("#sethost")) {
-		  // 
+		  if(!isConnected()) {
+			  String[] parts = command.split(" ");
+			  String h = parts[1];
+			  setHost(h);
+		  } else {
+			  System.out.println("Error - cannot set host when there is an active connection");
+		  }
 		  
 	  } else if(command.equals("#setport")) {
+		  if(!isConnected()) {
+			  String[] parts = command.split(" ");
+			  int p = Integer.parseInt(parts[1]);
+			  setPort(p);
+			  clientUI.display("Port successfully set to " + p);
+		  } else {
+			  System.out.println("Error - cannot set port when there is an active connection");
+		  }
 		  
 	  } else if(command.equals("#login")) {
 		  // check first if the client is disconnected
 		  // !isConnected() -> connect
 		  
-	  } else if(command.equals("#getHost")) {
+		  // openConnection() from AbstractClient will already check if it is connected
+		  try {
+			  openConnection();
+			  clientUI.display("Login successful.");
+		  } catch (IOException ex) { }
 		  
-	  } else if(command.equals("getPort")) {
-		   
+	  } else if(command.equals("#getHost")) {
+		  clientUI.display(getHost());
+	  } else if(command.equals("#getPort")) {
+		  clientUI.display(String.valueOf(getPort()));
 	  }
   }
   
