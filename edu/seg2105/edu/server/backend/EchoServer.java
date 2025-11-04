@@ -106,6 +106,8 @@ public class EchoServer extends AbstractServer
    * Overrides the method to handle commands from the user. 
    * @param command the command prompt the user enters into the console.
    */
+  
+  // fix these before moving on 
   private void handleCommand(String command) {
 	  if(command.equals("#quit")) {
 		  // quit gracefully
