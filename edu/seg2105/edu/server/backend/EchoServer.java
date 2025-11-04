@@ -111,10 +111,11 @@ public class EchoServer extends AbstractServer
 		  // quit gracefully
 		  try {
 			close();
+			//display("The server has closed.");
+			System.out.println("The server has closed.");
 		  } catch (IOException e) {  }	
 	  } else if(command.equals("#stop")) {
 		  // stop listening for new clients
-		  //stopListening();
 		  stopListening();
 	  } else if(command.equals("#close")) {
 		  // stop listening for new clients and disconnect existing clients
@@ -129,6 +130,8 @@ public class EchoServer extends AbstractServer
 		  
 	  } else if(command.equals("#start")) {
 		  // server starts listening for new clients if server is stopped
+		  // if server stopped, listen for new clients
+		  // else -> output an error message
 		  
 		  
 	  } else if(command.equals("#getport")) {
