@@ -97,7 +97,7 @@ public class ChatClient extends AbstractClient
 		  quit();
 	  } else if(command.equals("#logoff")) {
 		  // override and implement the closeConnection() method in AbstractClient
-		  connectionClosed();
+		  //connectionClosed();
 		  try {
 			closeConnection();
 		} catch (IOException e) { }

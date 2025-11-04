@@ -4,6 +4,8 @@ package edu.seg2105.edu.server.backend;
 // license found at www.lloseng.com 
 
 
+import java.io.IOException;
+
 import ocsf.server.*;
 
 /**
@@ -91,6 +93,7 @@ public class EchoServer extends AbstractServer
 	System.out.println("Client has connected to the server.");
   }
   
+  
   @Override
   synchronized protected void clientDisconnected(ConnectionToClient client) {
 		// Since we don't track which ID belongs to this client directly,
@@ -98,6 +101,42 @@ public class EchoServer extends AbstractServer
 		//clientConnections.values().remove(client);
 	System.out.println("Client has disconnected from the server.");
 	}
+  
+  /**
+   * Overrides the method to handle commands from the user. 
+   * @param command the command prompt the user enters into the console.
+   */
+  private void handleCommand(String command) {
+	  if(command.equals("#quit")) {
+		  // quit gracefully
+		  try {
+			close();
+		  } catch (IOException e) {  }	
+	  } else if(command.equals("#stop")) {
+		  // stop listening for new clients
+		  //stopListening();
+		  stopListening();
+	  } else if(command.equals("#close")) {
+		  // stop listening for new clients and disconnect existing clients
+		  stopListening();
+		  // for every client connected: clientDisconnected();
+		  // serverClosed();
+	  } else if(command.equals("#setport <port>")) {
+		// if server is closed, stop listening for new clients
+		  String[] parts = command.split(" ");
+		  int p = Integer.parseInt(parts[1]);
+		  setPort(p);
+		  
+	  } else if(command.equals("#start")) {
+		  // server starts listening for new clients if server is stopped
+		  
+		  
+	  } else if(command.equals("#getport")) {
+		  getPort(); 
+		  
+	  }
+  
+  }
   
   //Class methods ***************************************************
   
