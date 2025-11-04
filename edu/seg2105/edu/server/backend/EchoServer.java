@@ -22,8 +22,10 @@ public class EchoServer extends AbstractServer
   /**
    * The default port to listen on.
    */
-  final public static int DEFAULT_PORT = 5555;
-  
+  //final public static int DEFAULT_PORT = 5555;
+  final public static int DEFAULT_PORT = 5566; // Changed because port 5555 is in use by Android on my device 
+  // source used to select the port: https://www.gasmi.net/tcp.php
+  // String loginKey = "loginID";
   //Constructors ****************************************************
   
   /**
@@ -48,7 +50,19 @@ public class EchoServer extends AbstractServer
   public void handleMessageFromClient
     (Object msg, ConnectionToClient client)
   {
+	  // if the message is login, then dont do this format
+	  // else, it is, and do the regular message 
     System.out.println("Message received: " + msg + " from " + client);
+   // String msgStr = (String) msg;
+   // if(msgStr.startsWith("#login")) {
+    	// get login ID
+    	// store the login ID as a String 
+    	//client.setInfo(loginKey, loginID);
+    //client.getInfo(loginKey if you want to read it, but don't implement this here 
+   // }
+    
+    
+    
     this.sendToAllClients(msg);
   }
     
@@ -72,6 +86,18 @@ public class EchoServer extends AbstractServer
       ("Server has stopped listening for connections.");
   }
   
+  @Override
+  protected void clientConnected(ConnectionToClient client) {
+	System.out.println("Client has connected to the server.");
+  }
+  
+  @Override
+  synchronized protected void clientDisconnected(ConnectionToClient client) {
+		// Since we don't track which ID belongs to this client directly,
+		// remove by value.
+		//clientConnections.values().remove(client);
+	System.out.println("Client has disconnected from the server.");
+	}
   
   //Class methods ***************************************************
   
@@ -97,14 +123,15 @@ public class EchoServer extends AbstractServer
 	
     EchoServer sv = new EchoServer(port);
     
-    try 
+   try 
     {
-      sv.listen(); //Start listening for connections
+     sv.listen(); //Start listening for connections
     } 
-    catch (Exception ex) 
-    {
-      System.out.println("ERROR - Could not listen for clients!");
+   catch (Exception ex) 
+   {
+     System.out.println("ERROR - Could not listen for clients!");
     }
+    
   }
 }
 //End of EchoServer class

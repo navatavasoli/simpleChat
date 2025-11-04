@@ -117,12 +117,14 @@ public class ClientConsole implements ChatIF
    */
   public static void main(String[] args) 
   {
+	// String loginID = "";
     String host = "";
     int port = 0;
 
 
     try
     {
+      //loginID = args[0]
       host = args[0];
       port = Integer.parseInt(args[1]);
     }

@@ -71,7 +71,11 @@ public class ChatClient extends AbstractClient
   {
     try
     {
-      sendToServer(message);
+    	if(message.startsWith("#")) {
+    		handleCommand(message);
+    	} else {
+    		sendToServer(message);
+    	}
     }
     catch(IOException e)
     {
@@ -79,6 +83,31 @@ public class ChatClient extends AbstractClient
         ("Could not send message to server.  Terminating client.");
       quit();
     }
+  }
+  
+  /**
+   * Handles commands from the user. 
+   * @param command the command prompt the user enters into the console.
+   */
+  private void handleCommand(String command) {
+	  if(command.equals("#quit")) {
+		  quit();
+	  } else if(command.equals("#logoff")) {
+		  // override and implement the closeConnection() method in AbstractClient
+	  } else if(command.equals("#sethost")) {
+		  // 
+		  
+	  } else if(command.equals("#setport")) {
+		  
+	  } else if(command.equals("#login")) {
+		  // check first if the client is disconnected
+		  // !isConnected() -> connect
+		  
+	  } else if(command.equals("#getHost")) {
+		  
+	  } else if(command.equals("getPort")) {
+		   
+	  }
   }
   
   /**
