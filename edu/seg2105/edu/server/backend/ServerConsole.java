@@ -3,8 +3,8 @@ import edu.seg2105.client.common.ChatIF;
 
 public class ServerConsole implements ChatIF {
 	
-	private EchoServer server;
-	
+	private final EchoServer server;
+
 	public ServerConsole(EchoServer server) {
 		this.server = server;
 	}
@@ -14,5 +14,5 @@ public class ServerConsole implements ChatIF {
 		System.out.println("SERVER MSG>" + message);
 		server.sendToAllClients("SERVER MSG>" + message);
 	}
-
 }
+
