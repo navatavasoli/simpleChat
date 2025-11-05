@@ -21,6 +21,11 @@ import edu.seg2105.client.common.*;
  */
 public class ClientConsole implements ChatIF 
 {
+	
+	// testing/debugging note 
+	// when you are adding arguments in the run configuration do it in this format: nava localhost 5566
+	
+	
   //Class variables *************************************************
   
   /**
@@ -117,19 +122,25 @@ public class ClientConsole implements ChatIF
    */
   public static void main(String[] args) 
   {
-	String loginID = "";
+	  // debugging
+	  if(args.length <1) {
+		  System.out.println("Error - you need to provide a loginID");
+		  System.exit(1);
+	  }
+	  
+	String loginID = args[0];
     String host = "";
-    int port = 0;
+    int port;
 
     try
     {
-      loginID = args[0]; // first thing user should enter 
+ // first thing user should enter 
       host = args[1];
       port = Integer.parseInt(args[2]);
     }
-    catch(MissingFormatArgumentException me) {
-    	System.out.println("ERROR - you must enter a login ID.");
-    }
+    //catch(MissingFormatArgumentException me) {
+    	//System.out.println("ERROR - you must enter a login ID.");
+   // }
     catch(ArrayIndexOutOfBoundsException e)
     {
       host = "localhost";
@@ -139,7 +150,7 @@ public class ClientConsole implements ChatIF
     catch(NumberFormatException ne) {
     	port = DEFAULT_PORT;
     }
-    ClientConsole chat= new ClientConsole(loginID, host, DEFAULT_PORT);
+    ClientConsole chat= new ClientConsole(loginID, host, port);
     chat.accept();  //Wait for console data
   }
 }

@@ -70,7 +70,14 @@ public class EchoServer extends AbstractServer
     //client.getInfo(loginKey if you want to read it, but don't implement this here 
    // }
     
-    
+    String str = String.valueOf(msg);
+    if(str.startsWith("#login")) {
+    	// # l o g i n _ (7)
+    	String id = str.substring(7).trim();
+    	client.setInfo("loginID", id);
+    	System.out.println("Login from  #login " + id + " " + client);
+    	return;
+    }
     
     this.sendToAllClients(msg);
   }
@@ -156,7 +163,7 @@ public class EchoServer extends AbstractServer
 		  String[] parts = command.split(" ");
 		  int p = Integer.parseInt(parts[1]);
 		  setPort(p);
-		  System.out.println("Port set successfully.");
+		  System.out.println("Port set successfully to: " + getPort());
 		  
 	  } else if(command.equals("#start")) {
 		  // server starts listening for new clients if server is stopped
@@ -199,8 +206,8 @@ public class EchoServer extends AbstractServer
       port = Integer.parseInt(args[0]); //Get port from command line
     }
     catch(Throwable t)
-    {
-      port = DEFAULT_PORT; //Set port to 5555
+    { // they don't enter a port number 
+      port = DEFAULT_PORT; //Set port to 5566 in my case 
     }
 	
     EchoServer sv = new EchoServer(port);
@@ -208,12 +215,13 @@ public class EchoServer extends AbstractServer
     
     try {
     	sv.listen();
+    	System.out.println("The server is now starting. Port: " + port);
     } catch (Exception e) {
     	System.out.println("Error - not able to listen for clients.");
     }
 
     cs.accept();
-    cs.display("Server starting on port " + port);
+    //cs.display("Server starting on port " + port);
     
    try 
     {

@@ -44,6 +44,10 @@ public class ChatClient extends AbstractClient
     throws IOException 
   {
     super(host, port); //Call the superclass constructor
+    // debugging so there isn't empty id
+    if(loginID == null || loginID.isBlank()) {
+    	throw new IllegalArgumentException("The login ID can't be empty.");
+    }
     this.loginID = loginID;
     this.clientUI = clientUI;
     openConnection();
@@ -110,6 +114,7 @@ public class ChatClient extends AbstractClient
 			  String[] parts = command.split(" ");
 			  String h = parts[1];
 			  setHost(h);
+			  clientUI.display("Host set to " + getHost());
 		  } else {
 			  System.out.println("Error - cannot set host when there is an active connection");
 		  }
@@ -129,13 +134,17 @@ public class ChatClient extends AbstractClient
 		  // !isConnected() -> connect
 		  
 		  // openConnection() from AbstractClient will already check if it is connected
-		 
+		 if(isConnected()) {
+			 clientUI.display("You are already logged in, " + loginID);
+		 }
 		  String[] parts = command.split(" ");
 		  try {
 			  openConnection();
-			  sendToServer("#login " + parts[1]);
-			  clientUI.display("Login successful. Welcome, " + parts[1]);
-		  } catch (IOException ex) { }
+			  sendToServer("#login " + loginID);
+			  clientUI.display("Login successful. Signed in as: " + loginID);
+		  } catch (IOException ex) {
+			  clientUI.display("Error" + ex.getMessage());
+		  }
 	  } else if(command.equals("#getHost")) {
 		  clientUI.display(getHost());
 	  } else if(command.equals("#getPort")) {

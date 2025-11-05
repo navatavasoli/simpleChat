@@ -21,12 +21,14 @@ public class ServerConsole implements ChatIF {
 	
 	public void accept() {
 		java.util.Scanner in = new java.util.Scanner(System.in);
+		while(true) { // read continuously 
 		String msg = in.nextLine();
 		if(msg.startsWith("#")) {
 			server.handleCommand(msg);
 		} else {
 			display(msg); // if its not  a command treat it like any other broadcast server message 
 		}
+	}
 	}
 	
 	 
