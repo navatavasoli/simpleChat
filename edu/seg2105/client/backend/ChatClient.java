@@ -47,6 +47,14 @@ public class ChatClient extends AbstractClient
     // debugging so there isn't empty id
     if(loginID == null || loginID.isBlank()) {
     	throw new IllegalArgumentException("The login ID can't be empty.");
+    	//System.out.println("You need to enter in a login.");
+    	//System.exit(1);
+    	
+    }
+    if(host == null || host.isBlank()) {
+    	//throw new IllegalArgumentException("Error - can't setup  a connection. Terminating the client.");
+    	System.out.println("Error - can't setup  a connection. Terminating the client.");
+    	System.exit(1);
     }
     this.loginID = loginID;
     this.clientUI = clientUI;

@@ -70,10 +70,14 @@ public class EchoServer extends AbstractServer
     //client.getInfo(loginKey if you want to read it, but don't implement this here 
    // }
     
+    
     String str = String.valueOf(msg);
     if(str.startsWith("#login")) {
     	// # l o g i n _ (7)
     	String id = str.substring(7).trim();
+    	 if(id == null || id.isBlank()) {
+    	    	throw new IllegalArgumentException("The loginID cannot be blank.");
+    	    }
     	client.setInfo("loginID", id);
     	System.out.println("Login from  #login " + id + " " + client);
     	return;
@@ -105,7 +109,7 @@ public class EchoServer extends AbstractServer
   
   @Override
   protected void clientConnected(ConnectionToClient client) {
-	System.out.println("Client has connected to the server.");
+	System.out.println("A new client has connected to the server.");
   }
   
   
@@ -215,7 +219,7 @@ public class EchoServer extends AbstractServer
     
     try {
     	sv.listen();
-    	System.out.println("The server is now starting. Port: " + port);
+    	//System.out.println("The server is now starting. Port: " + port);
     } catch (Exception e) {
     	System.out.println("Error - not able to listen for clients.");
     }
