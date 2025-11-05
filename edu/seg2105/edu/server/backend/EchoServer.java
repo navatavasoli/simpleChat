@@ -24,8 +24,8 @@ public class EchoServer extends AbstractServer
   /**
    * The default port to listen on.
    */
-  //final public static int DEFAULT_PORT = 5555;
-  final public static int DEFAULT_PORT = 5566; // Changed because port 5555 is in use by Android on my device 
+  //final public static int DEFAULT_PORT = 5555; 5566
+  final public static int DEFAULT_PORT = 5555; // Changed because port 5555 is in use by Android on my device 
   // source used to select the port: https://www.gasmi.net/tcp.php
   // String loginKey = "loginID";
   //Constructors ****************************************************
