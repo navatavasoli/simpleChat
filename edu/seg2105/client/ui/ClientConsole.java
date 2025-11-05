@@ -4,6 +4,7 @@ package edu.seg2105.client.ui;
 // license found at www.lloseng.com 
 
 import java.io.*;
+import java.util.MissingFormatArgumentException; // import when the client doesn't enter their id (missing parameter)
 import java.util.Scanner;
 
 import edu.seg2105.client.backend.ChatClient;
@@ -25,7 +26,8 @@ public class ClientConsole implements ChatIF
   /**
    * The default port to connect on.
    */
-  final public static int DEFAULT_PORT = 5555;
+  //final public static int DEFAULT_PORT = 5555;
+	final public static int DEFAULT_PORT = 5566;
   
   //Instance variables **********************************************
   
@@ -50,13 +52,11 @@ public class ClientConsole implements ChatIF
    * @param host The host to connect to.
    * @param port The port to connect on.
    */
-  public ClientConsole(String host, int port) 
+  public ClientConsole(String loginID, String host, int port) 
   {
     try 
     {
-      client= new ChatClient(host, port, this);
-      
-      
+      client= new ChatClient(loginID, host, port, this);  
     } 
     catch(IOException exception) 
     {
@@ -117,16 +117,18 @@ public class ClientConsole implements ChatIF
    */
   public static void main(String[] args) 
   {
-	// String loginID = "";
+	String loginID = "";
     String host = "";
     int port = 0;
 
-
     try
     {
-      //loginID = args[0]
-      host = args[0];
-      port = Integer.parseInt(args[1]);
+      loginID = args[0]; // first thing user should enter 
+      host = args[1];
+      port = Integer.parseInt(args[2]);
+    }
+    catch(MissingFormatArgumentException me) {
+    	System.out.println("ERROR - you must enter a login ID.");
     }
     catch(ArrayIndexOutOfBoundsException e)
     {
@@ -137,7 +139,7 @@ public class ClientConsole implements ChatIF
     catch(NumberFormatException ne) {
     	port = DEFAULT_PORT;
     }
-    ClientConsole chat= new ClientConsole(host, DEFAULT_PORT);
+    ClientConsole chat= new ClientConsole(loginID, host, DEFAULT_PORT);
     chat.accept();  //Wait for console data
   }
 }

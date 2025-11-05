@@ -27,6 +27,7 @@ public class ChatClient extends AbstractClient
    * the display method in the client.
    */
   ChatIF clientUI; 
+  private final String loginID;
 
   
   //Constructors ****************************************************
@@ -39,12 +40,14 @@ public class ChatClient extends AbstractClient
    * @param clientUI The interface type variable.
    */
   
-  public ChatClient(String host, int port, ChatIF clientUI) 
+  public ChatClient(String loginID, String host, int port, ChatIF clientUI) 
     throws IOException 
   {
     super(host, port); //Call the superclass constructor
+    this.loginID = loginID;
     this.clientUI = clientUI;
     openConnection();
+    sendToServer("#login " + this.loginID);
   }
 
   
@@ -121,16 +124,18 @@ public class ChatClient extends AbstractClient
 			  System.out.println("Error - cannot set port when there is an active connection");
 		  }
 		  
-	  } else if(command.equals("#login")) {
+	  } else if(command.equals("#login <loginid>")) {
 		  // check first if the client is disconnected
 		  // !isConnected() -> connect
 		  
 		  // openConnection() from AbstractClient will already check if it is connected
+		 
+		  String[] parts = command.split(" ");
 		  try {
 			  openConnection();
-			  clientUI.display("Login successful.");
+			  sendToServer("#login " + parts[1]);
+			  clientUI.display("Login successful. Welcome, " + parts[1]);
 		  } catch (IOException ex) { }
-		  
 	  } else if(command.equals("#getHost")) {
 		  clientUI.display(getHost());
 	  } else if(command.equals("#getPort")) {

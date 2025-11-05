@@ -39,6 +39,13 @@ public class EchoServer extends AbstractServer
   {
     super(port);
   }
+  
+  // type volatile so we can see it across different threads
+  public volatile boolean closed = true;
+  
+  public boolean isClosed() {
+	  return closed;
+  }
 
   
   //Instance methods ************************************************
@@ -74,6 +81,7 @@ public class EchoServer extends AbstractServer
    */
   protected void serverStarted()
   {
+	  closed = false;
     System.out.println
       ("Server listening for connections on port " + getPort());
   }
@@ -102,13 +110,19 @@ public class EchoServer extends AbstractServer
 	System.out.println("Client has disconnected from the server.");
 	}
   
+  @Override
+  protected void serverClosed() {
+	  closed = true;
+	  System.out.println("The server is now closed");
+  }
+  
   /**
    * Overrides the method to handle commands from the user. 
    * @param command the command prompt the user enters into the console.
    */
   
   // fix these before moving on 
-  private void handleCommand(String command) {
+  void handleCommand(String command) {
 	  if(command.equals("#quit")) {
 		  // quit gracefully
 		  try {
@@ -117,11 +131,24 @@ public class EchoServer extends AbstractServer
 			System.out.println("The server has closed.");
 		  } catch (IOException e) {  }	
 	  } else if(command.equals("#stop")) {
-		  // stop listening for new clients
+		  if(isListening()) {
+			  stopListening();
+			  System.out.println("Server stopped listening.");
+		  } else {
+			  System.out.println("Error - server was not listening.");
+		  }
 		  stopListening();
 	  } else if(command.equals("#close")) {
+		  if(!isClosed()) {
+			  try {
+				close();
+			  } catch (IOException e) { }
+			  System.out.println("Server closed.");
+		  } else {
+			  System.out.println("Server already closed.");
+		  }
 		  // stop listening for new clients and disconnect existing clients
-		  stopListening();
+		  //stopListening();
 		  // for every client connected: clientDisconnected();
 		  // serverClosed();
 	  } else if(command.equals("#setport <port>")) {
@@ -129,15 +156,26 @@ public class EchoServer extends AbstractServer
 		  String[] parts = command.split(" ");
 		  int p = Integer.parseInt(parts[1]);
 		  setPort(p);
+		  System.out.println("Port set successfully.");
 		  
 	  } else if(command.equals("#start")) {
 		  // server starts listening for new clients if server is stopped
 		  // if server stopped, listen for new clients
 		  // else -> output an error message
 		  
+		  if(isListening()) {
+			  System.out.println("Server already listening.");
+		  } else {
+			  try {
+				listen();
+			  } catch (IOException e) {}
+			  System.out.println("Server started listening.");
+		  }
+		  
 		  
 	  } else if(command.equals("#getport")) {
 		  getPort(); 
+		  System.out.println("Current port: " + getPort());
 		  
 	  }
   
@@ -168,6 +206,13 @@ public class EchoServer extends AbstractServer
     EchoServer sv = new EchoServer(port);
     ServerConsole cs = new ServerConsole(sv);
     
+    try {
+    	sv.listen();
+    } catch (Exception e) {
+    	System.out.println("Error - not able to listen for clients.");
+    }
+
+    cs.accept();
     cs.display("Server starting on port " + port);
     
    try 
