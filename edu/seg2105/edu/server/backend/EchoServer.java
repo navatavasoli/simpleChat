@@ -40,7 +40,7 @@ public class EchoServer extends AbstractServer
     super(port);
   }
   
-  // type volatile so we can see it across different threads
+  // type volatile to see it across different threads
   public volatile boolean closed = true;
   
   public boolean isClosed() {

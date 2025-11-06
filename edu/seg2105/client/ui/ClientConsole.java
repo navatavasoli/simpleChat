@@ -122,7 +122,6 @@ public class ClientConsole implements ChatIF
    */
   public static void main(String[] args) 
   {
-	  // debugging
 	  if(args.length <1) {
 		  System.out.println("Error - you need to provide a loginID");
 		  System.exit(1);
